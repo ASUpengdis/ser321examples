@@ -242,6 +242,8 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
 
+          System.out.println(json);
+          /*
           try
           {
         	  
@@ -264,7 +266,7 @@ class WebServer {
           catch(Exception e)
           {
         	  e.printStackTrace();
-          }
+          }*/
           
     	  
           //builder.append("Check the todos mentioned in the Java source file");

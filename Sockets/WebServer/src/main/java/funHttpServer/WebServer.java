@@ -244,20 +244,40 @@ class WebServer {
           {
         	  String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
         	  //System.out.println(json);
-          
-        	  if(json == null)
+        	  
+        	  JSONArray repoArray = new JSONArray(json);
+        	  JSONArray newArray = new JSONArray();
+        	  for(int i = 0; i < repoArray.length(); i++)
         	  {
-        		  System.out.println("Empty Json");
+        		  JSONObject temp = new JSONObject();
+        		  temp.put("ownerName", repoArray.getJSONObject(i).getJSONObject("owner").getString("login"));
+        		  temp.put("ownerID",repoArray.getJSONObject(i).getJSONObject("owner").getInt("id"));
+        		  temp.put("repoName", repoArray.getJSONObject(i).getString("name"));
+        		  
+        		  newArray.put(temp);
         	  }
-        	  else
+        	  
+        	  String result = "";
+        	  
+        	  for(int i = 0; i < newArray.length();i++)
         	  {
-        		  System.out.println(json);
+        		  result += newArray.getJSONObject(i).getString("ownerName") + ", "
+        				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
+        				  + newArray.getJSONObject(i).getString("repoName") + '\n';
+        		  
         	  }
+        	  
+        	  builder.append("HTTP/1.1 200 OK\n");
+        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+        	  builder.append("\n");
+        	  builder.append(result);
           }
           catch(Exception e)
           {
         	  e.printStackTrace();
           }
+          
+          
           /*
           try
           {

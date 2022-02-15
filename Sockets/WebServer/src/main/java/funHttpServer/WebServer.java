@@ -257,20 +257,17 @@ class WebServer {
         		  newArray.put(temp);
         	  }
         	  
-        	  String result = "";
-        	  
-        	  for(int i = 0; i < newArray.length();i++)
-        	  {
-        		  result += newArray.getJSONObject(i).getString("ownerName") + ", "
-        				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
-        				  + newArray.getJSONObject(i).getString("repoName") + '\n';
-        		  
-        	  }
-        	  
         	  builder.append("HTTP/1.1 200 OK\n");
         	  builder.append("Content-Type: text/html; charset=utf-8\n");
         	  builder.append("\n");
-        	  builder.append(result);
+        	  
+        	  for(int i = 0; i < newArray.length();i++)
+        	  {
+        		  builder.append(newArray.getJSONObject(i).getString("ownerName") + ", "
+        				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
+        				  + newArray.getJSONObject(i).getString("repoName"));
+        		  
+        	  }
           }
           catch(Exception e)
           {

@@ -242,17 +242,9 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
 
-          if(json == null)
-          {
-        	  System.out.println("Empty Json");
-          }
-          else
-          {
-        	  System.out.println(json);
-          }
           try
           {
-        	  /*
+        	  
         	  JSONArray repoArray = new JSONArray(json);
         	  if(repoArray == null)
         	  {
@@ -267,7 +259,7 @@ class WebServer {
     			  builder.append("Content-Type: text/html; charset=utf-8\n");
     			  builder.append("\n");
     			  builder.append("Its aight");
-    		  }*/
+    		  }
           }
           catch(Exception e)
           {

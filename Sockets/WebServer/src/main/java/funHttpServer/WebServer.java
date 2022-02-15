@@ -16,6 +16,8 @@ write a response back
 
 package funHttpServer;
 
+import org.json.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -219,7 +221,7 @@ class WebServer {
           }
           catch(NumberFormatException e)
           {
-        	  builder.append("HTTP/1.1 400 OK\n");
+        	  builder.append("HTTP/1.1 400 Incorrect Syntax\n");
         	  builder.append("Content-Type: text/html; charset=utf-8\n");
         	  builder.append("\n");
         	  builder.append("Error 400: Please use integers.");
@@ -240,10 +242,35 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
           //System.out.println(json);
-          builder.append("HTTP/1.1 400 OK\n");
-    	  builder.append("Content-Type: text/html; charset=utf-8\n");
-    	  builder.append("\n");
-    	  builder.append("Hi there testing");
+          
+          try
+          {
+        	  JSONArray repoArray = new JSONArray(json);
+        	  if(repoArray.length()==1)
+        	  {
+        		  JSONObject repo = repoArray.getJSONObject(0);
+        		  if(repo.getString("message").equals("Not Found"))
+        		  {
+        			  builder.append("HTTP/1.1 400 OK\n");
+        			  builder.append("Content-Type: text/html; charset=utf-8\n");
+        			  builder.append("\n");
+        			  builder.append("Page not found");
+        		  }
+        		  else
+        		  {
+        			  builder.append("HTTP/1.1 200 OK\n");
+        			  builder.append("Content-Type: text/html; charset=utf-8\n");
+        			  builder.append("\n");
+        			  builder.append("Its aight");
+        		  }
+        	  }
+          }
+          catch(Exception e)
+          {
+        	  e.printStackTrace();
+          }
+          
+    	  
           //builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response

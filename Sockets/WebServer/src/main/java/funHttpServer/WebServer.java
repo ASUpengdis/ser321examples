@@ -241,8 +241,8 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
-          /*
+          //System.out.println(json);
+          
           if(json == null)
           {
         	  System.out.println("Empty Json");
@@ -250,7 +250,8 @@ class WebServer {
           else
           {
         	  System.out.println(json);
-          }*/
+          }
+          /*
           try
           {
         	  JSONArray repoArray = new JSONArray(json);
@@ -273,7 +274,7 @@ class WebServer {
           {
         	  e.printStackTrace();
           }
-          
+          */
     	  
           //builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate

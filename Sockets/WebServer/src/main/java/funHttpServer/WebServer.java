@@ -241,7 +241,8 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-
+          System.out.println(json);
+          /*
           if(json == null)
           {
         	  System.out.println("Empty Json");
@@ -252,7 +253,6 @@ class WebServer {
           }
           try
           {
-        	  /*
         	  JSONArray repoArray = new JSONArray(json);
         	  if(repoArray == null)
         	  {
@@ -267,12 +267,12 @@ class WebServer {
     			  builder.append("Content-Type: text/html; charset=utf-8\n");
     			  builder.append("\n");
     			  builder.append("Its aight");
-    		  }*/
+    		  }
           }
           catch(Exception e)
           {
         	  e.printStackTrace();
-          }
+          }*/
           
     	  
           //builder.append("Check the todos mentioned in the Java source file");

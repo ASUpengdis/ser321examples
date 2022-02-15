@@ -383,13 +383,11 @@ class WebServer {
    **/
   public String fetchURL(String aUrl) {
     StringBuilder sb = new StringBuilder();
-    //URLConnection conn = null;
-    HttpURLConnection conn = null;
+    URLConnection conn = null;
     InputStreamReader in = null;
     try {
       URL url = new URL(aUrl);
-      conn = (HttpURLConnection) url.openConnection();
-      conn.addRequestProperty("User-Agent", "Mozilla/4.76");
+      conn =  url.openConnection();
       if (conn != null)
         conn.setReadTimeout(20 * 1000); // timeout in 20 seconds
       if (conn != null && conn.getInputStream() != null) {

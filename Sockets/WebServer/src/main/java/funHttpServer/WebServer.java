@@ -270,8 +270,8 @@ class WebServer {
         		  builder.append("<li>" + newArray.getJSONObject(i).getString("ownerName") + ", "
         				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
         				  + newArray.getJSONObject(i).getString("repoName")+'\n' + "</li>");
-        		  
         	  }
+        	  builder.append("</ul>\n");
           }
           catch(Exception e)
           {

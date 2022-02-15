@@ -262,42 +262,20 @@ class WebServer {
         	  builder.append("\n");
         	  for(int i = 0; i < newArray.length();i++)
         	  {
-        		  builder.append(newArray.getJSONObject(i).getString("ownerName") + ", "
+        		  builder.append("<div>").append(newArray.getJSONObject(i).getString("ownerName") + ", "
         				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
         				  + newArray.getJSONObject(i).getString("repoName")+'\n');
-        		  builder.append('\n');
+        		  builder.append('\n').append("</div>");
         	  }
           }
           catch(Exception e)
           {
+        	  builder.append("HTTP/1.1 400 Syntax Error\n");
+        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+        	  builder.append("\n");
+        	  builder.append("Error 400: The directory provided does not exist or your query is misspelled");
         	  e.printStackTrace();
           }
-          
-          
-          /*
-          try
-          {
-        	  JSONArray repoArray = new JSONArray(json);
-        	  if(repoArray == null)
-        	  {
-        		  builder.append("HTTP/1.1 400 OK\n");
-    			  builder.append("Content-Type: text/html; charset=utf-8\n");
-    			  builder.append("\n");
-    			  builder.append("Page not found");
-        	  }
-        	  else
-    		  {
-    			  builder.append("HTTP/1.1 200 OK\n");
-    			  builder.append("Content-Type: text/html; charset=utf-8\n");
-    			  builder.append("\n");
-    			  builder.append("Its aight");
-    		  }
-          }
-          catch(Exception e)
-          {
-        	  e.printStackTrace();
-          }
-          */
     	  
           //builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate

@@ -246,24 +246,20 @@ class WebServer {
           try
           {
         	  JSONArray repoArray = new JSONArray(json);
-        	  if(repoArray.length()==1)
+        	  if(repoArray == null)
         	  {
-        		  JSONObject repo = repoArray.getJSONObject(0);
-        		  if(repo == null)
-        		  {
-        			  builder.append("HTTP/1.1 400 OK\n");
-        			  builder.append("Content-Type: text/html; charset=utf-8\n");
-        			  builder.append("\n");
-        			  builder.append("Page not found");
-        		  }
-        		  else
-        		  {
-        			  builder.append("HTTP/1.1 200 OK\n");
-        			  builder.append("Content-Type: text/html; charset=utf-8\n");
-        			  builder.append("\n");
-        			  builder.append("Its aight");
-        		  }
+        		  builder.append("HTTP/1.1 400 OK\n");
+    			  builder.append("Content-Type: text/html; charset=utf-8\n");
+    			  builder.append("\n");
+    			  builder.append("Page not found");
         	  }
+        	  else
+    		  {
+    			  builder.append("HTTP/1.1 200 OK\n");
+    			  builder.append("Content-Type: text/html; charset=utf-8\n");
+    			  builder.append("\n");
+    			  builder.append("Its aight");
+    		  }
           }
           catch(Exception e)
           {

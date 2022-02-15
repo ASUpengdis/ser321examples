@@ -265,7 +265,7 @@ class WebServer {
         	  {
         		  builder.append(newArray.getJSONObject(i).getString("ownerName") + ", "
         				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
-        				  + newArray.getJSONObject(i).getString("repoName"));
+        				  + newArray.getJSONObject(i).getString("repoName")+'\n');
         		  
         	  }
           }

@@ -249,7 +249,7 @@ class WebServer {
         	  if(repoArray.length()==1)
         	  {
         		  JSONObject repo = repoArray.getJSONObject(0);
-        		  if(repo.getString("message").equals("Not Found"))
+        		  if(repo == null)
         		  {
         			  builder.append("HTTP/1.1 400 OK\n");
         			  builder.append("Content-Type: text/html; charset=utf-8\n");

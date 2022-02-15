@@ -241,8 +241,15 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
-          
+
+          if(json == null)
+          {
+        	  System.out.println("Empty Json");
+          }
+          else
+          {
+        	  System.out.println(json);
+          }
           try
           {
         	  /*

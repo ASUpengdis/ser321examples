@@ -260,19 +260,13 @@ class WebServer {
         	  builder.append("HTTP/1.1 200 OK\n");
         	  builder.append("Content-Type: text/html; charset=utf-8\n");
         	  builder.append("\n");
-        	  builder.append("<ul>\n");
-        	  /*
-              for (var filename : filenames) {
-                builder.append("<li>" + filename + "</li>");
-              }*/
         	  for(int i = 0; i < newArray.length();i++)
         	  {
-        		  builder.append("<li>" + newArray.getJSONObject(i).getString("ownerName") + ", "
+        		  builder.append(newArray.getJSONObject(i).getString("ownerName") + ", "
         				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
-        				  + newArray.getJSONObject(i).getString("repoName")+'\n' + "</li>");
+        				  + newArray.getJSONObject(i).getString("repoName")+'\n');
         		  builder.append('\n');
         	  }
-        	  builder.append("</ul>\n");
           }
           catch(Exception e)
           {

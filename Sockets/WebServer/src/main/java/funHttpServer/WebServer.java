@@ -201,29 +201,39 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           // extract path parameters
-          query_pairs = splitQuery(request.replace("multiply?", ""));
-
-          // extract required fields from parameters
           try
           {
-        	  Integer num1 = Integer.parseInt(query_pairs.get("num1"));
-        	  Integer num2 = Integer.parseInt(query_pairs.get("num2"));
-        	  // do math
-        	  Integer result = num1 * num2;
-          
-        	  // Generate response
-        	  builder.append("HTTP/1.1 200 OK\n");
-        	  builder.append("Content-Type: text/html; charset=utf-8\n");
-        	  builder.append("\n");
-        	  builder.append("Result is: " + result);
-
+	          query_pairs = splitQuery(request.replace("multiply?", ""));
+	
+	          // extract required fields from parameters
+	          try
+	          {
+	        	  Integer num1 = Integer.parseInt(query_pairs.get("num1"));
+	        	  Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+	        	  // do math
+	        	  Integer result = num1 * num2;
+	          
+	        	  // Generate response
+	        	  builder.append("HTTP/1.1 200 OK\n");
+	        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+	        	  builder.append("\n");
+	        	  builder.append("Result is: " + result);
+	
+	          }
+	          catch(NumberFormatException e)
+	          {
+	        	  builder.append("HTTP/1.1 400 Incorrect Syntax\n");
+	        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+	        	  builder.append("\n");
+	        	  builder.append("Error 400: Please use integers or correct variable names");
+	          }
           }
-          catch(NumberFormatException e)
+          catch(Exception e)
           {
         	  builder.append("HTTP/1.1 400 Incorrect Syntax\n");
         	  builder.append("Content-Type: text/html; charset=utf-8\n");
         	  builder.append("\n");
-        	  builder.append("Error 400: Please use integers or correct variable names");
+        	  builder.append("Error 400: Please include all parameters");
           }
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
@@ -238,44 +248,53 @@ class WebServer {
           //     "/repos/OWNERNAME/REPONAME/contributors"
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-          query_pairs = splitQuery(request.replace("github?", ""));
           try
           {
-        	  String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-        	  //System.out.println(json);
-        	  
-        	  JSONArray repoArray = new JSONArray(json);
-        	  JSONArray newArray = new JSONArray();
-        	  for(int i = 0; i < repoArray.length(); i++)
-        	  {
-        		  JSONObject temp = new JSONObject();
-        		  temp.put("ownerName", repoArray.getJSONObject(i).getJSONObject("owner").getString("login"));
-        		  temp.put("ownerID",repoArray.getJSONObject(i).getJSONObject("owner").getInt("id"));
-        		  temp.put("repoName", repoArray.getJSONObject(i).getString("name"));
-        		  
-        		  newArray.put(temp);
-        	  }
-        	  
-        	  builder.append("HTTP/1.1 200 OK\n");
-        	  builder.append("Content-Type: text/html; charset=utf-8\n");
-        	  builder.append("\n");
-        	  for(int i = 0; i < newArray.length();i++)
-        	  {
-        		  builder.append("<div>").append(newArray.getJSONObject(i).getString("ownerName") + ", "
-        				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
-        				  + newArray.getJSONObject(i).getString("repoName")+'\n');
-        		  builder.append('\n').append("</div>");
-        	  }
+	          query_pairs = splitQuery(request.replace("github?", ""));
+	          try
+	          {
+	        	  String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+	        	  //System.out.println(json);
+	        	  
+	        	  JSONArray repoArray = new JSONArray(json);
+	        	  JSONArray newArray = new JSONArray();
+	        	  for(int i = 0; i < repoArray.length(); i++)
+	        	  {
+	        		  JSONObject temp = new JSONObject();
+	        		  temp.put("ownerName", repoArray.getJSONObject(i).getJSONObject("owner").getString("login"));
+	        		  temp.put("ownerID",repoArray.getJSONObject(i).getJSONObject("owner").getInt("id"));
+	        		  temp.put("repoName", repoArray.getJSONObject(i).getString("name"));
+	        		  
+	        		  newArray.put(temp);
+	        	  }
+	        	  
+	        	  builder.append("HTTP/1.1 200 OK\n");
+	        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+	        	  builder.append("\n");
+	        	  for(int i = 0; i < newArray.length();i++)
+	        	  {
+	        		  builder.append("<div>").append(newArray.getJSONObject(i).getString("ownerName") + ", "
+	        				  + newArray.getJSONObject(i).getInt("ownerID") + " -> "
+	        				  + newArray.getJSONObject(i).getString("repoName")+'\n');
+	        		  builder.append('\n').append("</div>");
+	        	  }
+	          }
+	          catch(Exception e)
+	          {
+	        	  builder.append("HTTP/1.1 400 Syntax Error\n");
+	        	  builder.append("Content-Type: text/html; charset=utf-8\n");
+	        	  builder.append("\n");
+	        	  builder.append("Error 400: The directory provided does not exist or your query is misspelled");
+	        	  e.printStackTrace();
+	          }
           }
           catch(Exception e)
           {
-        	  builder.append("HTTP/1.1 400 Syntax Error\n");
-        	  builder.append("Content-Type: text/html; charset=utf-8\n");
-        	  builder.append("\n");
-        	  builder.append("Error 400: The directory provided does not exist or your query is misspelled");
-        	  e.printStackTrace();
+        	  	builder.append("HTTP/1.1 400 Syntax Error\n");
+      	  		builder.append("Content-Type: text/html; charset=utf-8\n");
+      	  		builder.append("\n");
+      	  		builder.append("Please include the parameters. i.e: /github?query=user/amehlhase316/repos");
           }
-    	  
           //builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response
@@ -289,6 +308,8 @@ class WebServer {
         else if(request.contains("projectile?")) {
         	Map<String, String> query_pairs = new LinkedHashMap<String, String>();
             // extract path parameters
+        	try
+        	{
             query_pairs = splitQuery(request.replace("projectile?", ""));
             
             Double angle = 0.0;
@@ -362,6 +383,14 @@ class WebServer {
           	  	if(goodVelocity == false)
           	  		builder.append("<div>Please make sure that the velocity is greater than 0.</div>");
             }
+        	}
+        	catch(Exception e)
+        	{
+        		builder.append("HTTP/1.1 400 Syntax Error\n");
+        	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+        	  	builder.append("\n");
+        	  	builder.append("Please include the parameters. i.e: /projectile?angle=45&velocity=100");
+        	}
         }
         else if(request.contains("dice?"))
         {

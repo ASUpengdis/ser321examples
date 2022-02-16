@@ -321,7 +321,7 @@ class WebServer {
             	double timeToMaxHeight = yVelocity / 9.81;
             	maxHeight = yVelocity * timeToMaxHeight + .5 * (-9.81) * Math.pow(timeToMaxHeight, 2);
             	
-            	timeOfFlight *= 2;
+            	timeOfFlight = timeToMaxHeight * 2;
             	
             	maxDistance = xVelocity * timeOfFlight;
             	

@@ -367,80 +367,90 @@ class WebServer {
         {
         	Map<String, String> query_pairs = new LinkedHashMap<String, String>();
             // extract path parameters
-            query_pairs = splitQuery(request.replace("dice?", ""));
-            if(query_pairs.size() < 3)
-            {
-            	builder.append("HTTP/1.1 400 Syntax Error\n");
-          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
-          	  	builder.append("\n");
-          	  	builder.append("Please include the parameters. i.e: /dice?dice1=6&dice2=20&roll=10");
-            }
-            else
-            {
-		        int numSides1 = 0;
-		        int numSides2 = 0;
-		        int numRolls = 0;
-		        boolean valid = false;
-		        try
-		        {
-		        	numSides1 = Integer.parseInt(query_pairs.get("dice1"));
-		        	numSides2 = Integer.parseInt(query_pairs.get("dice2"));
-		        	numRolls = Integer.parseInt(query_pairs.get("rolls"));
-		        	valid = true;
-		        }
-		        catch (NumberFormatException e)
-		        {
-		        	builder.append("HTTP/1.1 400 Syntax Error\n");
-		      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
-		      	  	builder.append("\n");
-		      	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
-		        }
-		        
-		        if(valid == true && (numSides1 < 1 || numSides2 < 1 || numRolls < 1))
-		        {
-		        	builder.append("HTTP/1.1 400 Syntax Error\n");
-		      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
-		      	  	builder.append("\n");
-		      	  	builder.append("Error 400: Please use a number greater than 0 for all variables");
-		        }
-		        else if(valid == true)
-		        {
-		        	int[] rollValues = new int[numRolls];
-		        	int roll1 = 0;
-		        	int roll2 = 0;
-		        	int maxValue = 0;
-		        	int totalValue = 0;
-		        	String rolls = "";
-		        	
-		        	for(int i = 0; i < numRolls; i++)
-		        	{
-		        		roll1 = (int)(Math.random()*numSides1)+1;
-		        		roll2 = (int)(Math.random()*numSides2)+1;
-		        		rollValues[i] = roll1+roll2;
-		        		
-		        		if(rollValues[i] > maxValue)
-		        			maxValue = rollValues[i];
-		        		
-		        		totalValue += rollValues[i];
-		        		if(i + 1 != numRolls)
-		        		{
-		        			rolls += rollValues[i] + ", ";
-		        		}
-		        		else
-		        		{
-		        			rolls += rollValues[i];
-		        		}
-		        	}
-		        	double averageValue = totalValue * 1.0 / numRolls;
-		        	
-		        	builder.append("HTTP/1.1 200 OK\n");
-		      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
-		      	  	builder.append("\n");
-		      	  	builder.append("<div>Rolls: ["+rolls+"]</div>");
-		      	  	builder.append(String.format("<div>Largest roll was: %1d</div>", maxValue));
-		      	  	builder.append(String.format("<div>The average roll was: %.2f</div>", averageValue));
-		        }
-            }
+        	try
+        	{
+	            query_pairs = splitQuery(request.replace("dice?", ""));
+	            if(query_pairs.size() < 3)
+	            {
+	            	builder.append("HTTP/1.1 400 Syntax Error\n");
+	          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+	          	  	builder.append("\n");
+	          	  	builder.append("Please include the parameters. i.e: /dice?dice1=6&dice2=20&roll=10");
+	            }
+	            else
+	            {
+			        int numSides1 = 0;
+			        int numSides2 = 0;
+			        int numRolls = 0;
+			        boolean valid = false;
+			        try
+			        {
+			        	numSides1 = Integer.parseInt(query_pairs.get("dice1"));
+			        	numSides2 = Integer.parseInt(query_pairs.get("dice2"));
+			        	numRolls = Integer.parseInt(query_pairs.get("rolls"));
+			        	valid = true;
+			        }
+			        catch (NumberFormatException e)
+			        {
+			        	builder.append("HTTP/1.1 400 Syntax Error\n");
+			      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+			      	  	builder.append("\n");
+			      	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
+			        }
+			        
+			        if(valid == true && (numSides1 < 1 || numSides2 < 1 || numRolls < 1))
+			        {
+			        	builder.append("HTTP/1.1 400 Syntax Error\n");
+			      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+			      	  	builder.append("\n");
+			      	  	builder.append("Error 400: Please use a number greater than 0 for all variables");
+			        }
+			        else if(valid == true)
+			        {
+			        	int[] rollValues = new int[numRolls];
+			        	int roll1 = 0;
+			        	int roll2 = 0;
+			        	int maxValue = 0;
+			        	int totalValue = 0;
+			        	String rolls = "";
+			        	
+			        	for(int i = 0; i < numRolls; i++)
+			        	{
+			        		roll1 = (int)(Math.random()*numSides1)+1;
+			        		roll2 = (int)(Math.random()*numSides2)+1;
+			        		rollValues[i] = roll1+roll2;
+			        		
+			        		if(rollValues[i] > maxValue)
+			        			maxValue = rollValues[i];
+			        		
+			        		totalValue += rollValues[i];
+			        		if(i + 1 != numRolls)
+			        		{
+			        			rolls += rollValues[i] + ", ";
+			        		}
+			        		else
+			        		{
+			        			rolls += rollValues[i];
+			        		}
+			        	}
+			        	double averageValue = totalValue * 1.0 / numRolls;
+			        	
+			        	builder.append("HTTP/1.1 200 OK\n");
+			      	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+			      	  	builder.append("\n");
+			      	  	builder.append("<div>Rolls: ["+rolls+"]</div>");
+			      	  	builder.append(String.format("<div>Largest roll was: %1d</div>", maxValue));
+			      	  	builder.append(String.format("<div>The average roll was: %.2f</div>", averageValue));
+			        }
+	            }
+        	}
+        	catch(Exception e)
+        	{
+        		builder.append("HTTP/1.1 400 Syntax Error\n");
+        	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+        	  	builder.append("\n");
+        	  	builder.append("Please include the parameters. i.e: /dice?dice1=6&dice2=20&roll=10");
+        	}
         }
         else {
           // if the request is not recognized at all

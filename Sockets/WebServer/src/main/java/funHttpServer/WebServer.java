@@ -328,7 +328,7 @@ class WebServer {
             	builder.append("HTTP/1.1 200 OK\n");
           	  	builder.append("Content-Type: text/html; charset=utf-8\n");
           	  	builder.append("\n");
-          	  	builder.append("<div>The max height of the projectile is: "+maxHeight+"</div>");
+          	  	builder.append(String.format("<div>The max height of the projectile is: %.2f meters </div>",maxHeight));
           	  	builder.append("<div>The max distance of the projectile is: "+maxDistance+"</div>");
           	  	builder.append("<div>The total time of flight of the projectile is: "+timeOfFlight+"</div>");
             }

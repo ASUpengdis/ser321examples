@@ -365,7 +365,7 @@ class WebServer {
           	  	builder.append("\n");
           	  	builder.append("Error 400: Please use a positive number for all variables");
             }
-            else
+            else if(valid == true)
             {
             	int[] rollValues = new int[numRolls];
             	int roll1 = 0;

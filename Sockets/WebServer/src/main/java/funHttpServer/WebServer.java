@@ -358,12 +358,12 @@ class WebServer {
           	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
             }
             
-            if(valid == true && (numSides1 < 0 || numSides2 < 0 || numRolls < 0))
+            if(valid == true && (numSides1 < 1 || numSides2 < 1 || numRolls < 1))
             {
             	builder.append("HTTP/1.1 400 Syntax Error\n");
           	  	builder.append("Content-Type: text/html; charset=utf-8\n");
           	  	builder.append("\n");
-          	  	builder.append("Error 400: Please use a positive number for all variables");
+          	  	builder.append("Error 400: Please use a number greater than 0 for all variables");
             }
             else if(valid == true)
             {

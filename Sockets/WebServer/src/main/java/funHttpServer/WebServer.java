@@ -291,14 +291,14 @@ class WebServer {
             // extract path parameters
             query_pairs = splitQuery(request.replace("projectile?", ""));
             
-            Integer angle = 0;
-            Integer velocity = 0;
+            Double angle = 0.0;
+            Double velocity = 0.0;
             boolean pass = false;
             boolean caught = false;
             try
             {
-            	angle = Integer.parseInt(query_pairs.get("angle"));
-            	velocity = Integer.parseInt(query_pairs.get("velocity"));
+            	angle = Double.parseDouble(query_pairs.get("angle"));
+            	velocity = Double.parseDouble(query_pairs.get("velocity"));
             	pass = true;
             	
             } catch (NumberFormatException e)

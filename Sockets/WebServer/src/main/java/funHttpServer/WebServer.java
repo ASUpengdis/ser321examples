@@ -296,8 +296,8 @@ class WebServer {
             boolean pass = false;
             try
             {
-            	angle = Math.abs(Integer.parseInt(query_pairs.get("angle")));
-            	velocity = Math.abs(Integer.parseInt(query_pairs.get("velocity")));
+            	angle = Integer.parseInt(query_pairs.get("angle"));
+            	velocity = Integer.parseInt(query_pairs.get("velocity"));
             	pass = true;
             	
             } catch (NumberFormatException e)
@@ -306,6 +306,21 @@ class WebServer {
           	  	builder.append("Content-Type: text/html; charset=utf-8\n");
           	  	builder.append("\n");
           	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
+            }
+            
+            boolean goodAngle = true;
+            boolean goodVelocity = true;
+            if(angle < 0 || angle > 90)
+            {
+            	goodAngle = false;
+            }
+            if(velocity < 0)
+            {
+            	goodVelocity = false;
+            }
+            if(goodAngle == false || goodVelocity == false)
+            {
+            	pass = false;
             }
             
             if(pass == true)
@@ -331,6 +346,16 @@ class WebServer {
           	  	builder.append(String.format("<div>The max height of the projectile is: %.2f meters </div>",maxHeight));
           	  	builder.append(String.format("<div>The max distance of the projectile is: %.2f meters </div>",maxDistance));
           	  	builder.append(String.format("<div>The total time of flight of the projectile is: %.2f seconds </div>",timeOfFlight));
+            }
+            else
+            {
+            	builder.append("HTTP/1.1 400 Syntax Error\n");
+          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+          	  	builder.append("\n");
+          	  	if(goodAngle == false)
+          	  		builder.append("<div>Please make sure the angle is between 0 and 90.</div>");
+          	  	if(goodVelocity == false)
+          	  		builder.append("<div>Please make sure that the velocity is greater than 0.</div>");
             }
         }
         else if(request.contains("dice?"))

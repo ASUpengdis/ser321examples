@@ -294,6 +294,7 @@ class WebServer {
             Integer angle = 0;
             Integer velocity = 0;
             boolean pass = false;
+            boolean caught = false;
             try
             {
             	angle = Integer.parseInt(query_pairs.get("angle"));
@@ -306,6 +307,7 @@ class WebServer {
           	  	builder.append("Content-Type: text/html; charset=utf-8\n");
           	  	builder.append("\n");
           	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
+          	  	caught = true;
             }
             
             boolean goodAngle = true;
@@ -349,9 +351,12 @@ class WebServer {
             }
             else
             {
-            	builder.append("HTTP/1.1 400 Syntax Error\n");
-          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
-          	  	builder.append("\n");
+            	if(caught == false)
+            	{
+            		builder.append("HTTP/1.1 400 Syntax Error\n");
+            		builder.append("Content-Type: text/html; charset=utf-8\n");
+          	  		builder.append("\n");
+            	}
           	  	if(goodAngle == false)
           	  		builder.append("<div>Please make sure the angle is between 0 and 90.</div>");
           	  	if(goodVelocity == false)

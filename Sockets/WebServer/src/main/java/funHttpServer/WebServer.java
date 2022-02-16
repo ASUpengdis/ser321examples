@@ -208,7 +208,6 @@ class WebServer {
           {
         	  Integer num1 = Integer.parseInt(query_pairs.get("num1"));
         	  Integer num2 = Integer.parseInt(query_pairs.get("num2"));
-
         	  // do math
         	  Integer result = num1 * num2;
           
@@ -224,7 +223,7 @@ class WebServer {
         	  builder.append("HTTP/1.1 400 Incorrect Syntax\n");
         	  builder.append("Content-Type: text/html; charset=utf-8\n");
         	  builder.append("\n");
-        	  builder.append("Error 400: Please use integers.");
+        	  builder.append("Error 400: Please use integers or correct variable names");
           }
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
@@ -286,7 +285,56 @@ class WebServer {
           // amehlhase, 46384989 -> test316
           
 
-        } else {
+        }
+        else if(request.contains("projectile?")) {
+        	Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+            // extract path parameters
+            query_pairs = splitQuery(request.replace("projectile?", ""));
+            
+            Integer angle = 0;
+            Integer velocity = 0;
+            boolean pass = false;
+            try
+            {
+            	angle = Math.abs(Integer.parseInt(query_pairs.get("angle")));
+            	velocity = Math.abs(Integer.parseInt(query_pairs.get("velocity")));
+            	pass = true;
+            	
+            } catch (NumberFormatException e)
+            {
+            	builder.append("HTTP/1.1 400 Syntax Error\n");
+          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+          	  	builder.append("\n");
+          	  	builder.append("Error 400: Please make sure you are using numbers for the values and that the parameter names are correctly spelled");
+            }
+            
+            if(pass == true)
+            {
+            	double radians = Math.toRadians(angle);
+            	double maxHeight = 0;
+            	double maxDistance = 0;
+            	double timeOfFlight = 0;
+            	
+            	double yVelocity =  velocity * Math.sin(radians);
+            	double xVelocity = velocity * Math.cos(radians);
+            	
+            	double timeToMaxHeight = yVelocity / 9.81;
+            	maxHeight = yVelocity * timeToMaxHeight + .5 * (-9.81) * Math.pow(timeToMaxHeight, 2);
+            	
+            	timeOfFlight *= 2;
+            	
+            	maxDistance = xVelocity * timeOfFlight;
+            	
+            	builder.append("HTTP/1.1 200 OK\n");
+          	  	builder.append("Content-Type: text/html; charset=utf-8\n");
+          	  	builder.append("\n");
+          	  	builder.append("<div>The max height of the projectile is: "+maxHeight+"</div>");
+          	  	builder.append("<div>The max distance of the projectile is: "+maxDistance+"</div>");
+          	  	builder.append("<div>The total time of flight of the projectile is: "+timeOfFlight+"</div>");
+            }
+            
+        }
+        else {
           // if the request is not recognized at all
 
           builder.append("HTTP/1.1 400 Bad Request\n");
